@@ -1,0 +1,84 @@
+---
+title: "Metodo de Horner"
+author: "Juan Anagrita, HectorHernandez, Aldemar Ramirez"
+date: "July 28,2019"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+  html_notebook: default
+---
+
+## Problema
+
+Evaluar el valor de un polinomio es una tarea que involucra para la
+maquina realizar un número de operaciones la cual debe ser mínimas. Como se puede
+evaluar el siguiente polinomio con el número mínimo de multiplicaciones
+
+$p(x) = 2x^4-3x^2+3x-4$
+
+$x=-2$
+
+## Solución 
+
+**Lenguaje de programación: ** R
+
+Parametros:
+
+coeficientes <- los coeficientes del polinomio. Si falta algun termino el coeficiente es cero.
+
+x <- valor sobre es cual se evalua la funcion.
+```{r}
+metodoHorner = function(coeficientes,x){
+  y <- 0
+  contador = 0
+  for(coeficiente in coeficientes){
+    y <- y*x + coeficiente
+    contador = contador+1
+  }
+  return (list("y"=y,"contador"=contador))
+}
+```
+Función principal para evaluar el polinomio (método de Horner).
+
+valores que retorna:
+
+y <- resultado del prolinomio evaluado en x.
+
+contador <- número de multiplicaciones necesarias que se realizaron.
+
+## Implementación
+
+```{r}
+coeficientes <- c(2,0,-3,3,-4)
+
+resultado<-metodoHorner(coeficientes,-2)
+```
+
+## Resultados
+
+```{r}
+cat("Resultado: ", resultado$y,"\n")
+cat("Numero de multiplicaciones: ",resultado$contador,"\n")
+```
+
+## Error
+```{r}
+f = function(x) 2*x^4-3*x^2+3*x-4
+cat("Resultado evaluando funcion directamente: ", f(-2),"\n")
+cat("Error:" ,f(-2)-resultado$y,"\n")
+
+```
+
+**Evaluando en otros valores**
+```{r}
+f = function(x) 2*x^4-3*x^2+3*x-4
+cat("Resultado evaluando funcion directamente: ", f(-0.000001),"\n")
+cat("Error:" ,f(-0.000001)-resultado$y,"\n")
+```
+En ninguno de los casos ni evaluando con números enteros o racionales hay error al aplicar el método de Horne.
+
+**Eficacia**
+En el meétodo de Horner solo se tienen que hacer tantas multiplicaciones como terminos tenga la función.
+
+Aplicando el método de remplazo tradicional el número total de multiplicaciones es la sumatoria de los coeficientes de los terminos.
