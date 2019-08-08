@@ -1,13 +1,13 @@
 ---
-title: "Raiz cuadrada"
+title: "Teorema de Taylor"
 author: "Juan Anagrita, HectorHernandez, Aldemar Ramirez"
 date: "July 28,2019"
 output:
-  pdf_document: default
   word_document: default
+  pdf_document: default
+  html_notebook: default
   html_document:
     df_print: paged
-  html_notebook: default
 ---
 
 ## Problema
@@ -140,6 +140,16 @@ tabla <- data.frame(
 print(tabla)
 ```
 
+## Gráfica
+
+```{r}
+plot(x = grados, y = resultados, type = "b", xlab="grado", ylab="valor de e^0.5",
+     main = "grados derivada vs valor aprox de e^0.5 ")
+
+plot(x = grados, y = errores, type = "b", xlab="grado", ylab="error",
+     main = "grados derivada vs error al evaluar e^0.5 ")
+```
+Como se ve en las gráficas entre más terminos sean usados en el teorema de Taylor para evaluar la expresión mayor va a ser la exactitud. El problema podría estar en la complejidad de calcular las primeras n derivadas de una función.
 
 ## Resultados
 

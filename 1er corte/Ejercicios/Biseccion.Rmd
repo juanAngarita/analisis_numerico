@@ -1,13 +1,13 @@
 ---
-title: "Método de biseccióm"
-author: "Juan Anagrita, HectorHernandez, Aldemar Ramirez"
+title: "Método de bisección"
+author: "Juan Anagrita, Hector Hernandez, Aldemar Ramirez"
 date: "Agosto 3,2019"
 output:
-  pdf_document: default
   word_document: default
-  html_notebook: default
+  pdf_document: default
   html_document:
     df_print: paged
+  html_notebook: default
 ---
 
 ## Problema
@@ -55,13 +55,14 @@ biseccion = function(f, xa, xb, tol){
   b_c <- c()
   m_c <- c()
   dx <- c()
-  
+  errorRelativo = c()
   repeat{
     m = a + 0.5*(b-a)
     m_c = c(m_c, m)
     
     if( f(m)==0 ){ 
-      lista = list("a_c" = a_c, "b_c" = b_c, "m_c" = m_c, "i" = k, "resultado" = m, "dx" = dx)
+      lista = list("a_c" = a_c, "b_c" = b_c, "m_c" = m_c, "i" = k, "resultado" = m,
+                   "dx" = dx)
       return(lista)  
     }
     
@@ -73,12 +74,12 @@ biseccion = function(f, xa, xb, tol){
     b_c = c(b_c,b)
     
     dx = c(dx,(b-a)/2) #error estimado
-    
     k = k+1
     
     #until
     if( dx[k] < tol ){
-      lista = list("a_c" = a_c, "b_c" = b_c, "m_c" = m_c, "i" = k, "resultado" = m, "dx" = dx)
+      lista = list("a_c" = a_c, "b_c" = b_c, "m_c" = m_c, "i" = k, "resultado" = m,
+                   "dx" = dx)
       return(lista)
       break;
     }
@@ -95,6 +96,8 @@ La función basicamente toma un intervalo [a,b] de la función, tal que f(a)*f(b
 ```{r}
 f = function(x) (-x)^3+28*x^2-192*x+250
 curve(f, 0,20); abline(h=0, v=0) #gráfico para decidir un intervalo
+title(main="y = (-x)^3+28*(x^2)-192*x+250")
+
 ```
 
 A través de la gráfica se puede ver que la función f tiene 3 raices.
@@ -104,15 +107,18 @@ A través de la gráfica se puede ver que la función f tiene 3 raices.
 ```{r}
 resultados <- biseccion(f, 0, 5, 1e-7)
 
-cat("Cero de f en [0,5] es approx: ",resultados$resultado, "con error <=", resultados$dx[resultados$i],"\n")
+cat("Cero de f en [0,5] es approx: ",resultados$resultado, "con error <=", 
+    resultados$dx[resultados$i],"\n")
 
 resultados <- biseccion(f, 5, 10, 1e-7)
 
-cat("Cero de f en [5,10] es approx: ",resultados$resultado, "con error <=", resultados$dx[resultados$i],"\n")
+cat("Cero de f en [5,10] es approx: ",resultados$resultado, "con error <=", 
+    resultados$dx[resultados$i],"\n")
 
 resultados <- biseccion(f, 15, 20, 1e-7)
 
-cat("Cero de f en [15,20] es approx: ",resultados$resultado, "con error <=", resultados$dx[resultados$i],"\n")
+cat("Cero de f en [15,20] es approx: ",resultados$resultado, "con error <=", 
+    resultados$dx[resultados$i],"\n")
 ```
 
 **Tabla de resultados a traves de las iteraciones: para el rango [15,20] **
@@ -132,7 +138,9 @@ print(tabla)
 **Grafica de iteraciones vs error estimado**
 
 ```{r}
-plot(x = 1:length(resultados$a_c), y = resultados$dx, xlab = "Iteraciones", ylab = "Error est.", main = "iteraciones vs error eestimado")
+plot(x = 1:length(resultados$a_c), y = resultados$dx,
+     xlab = "Iteraciones", ylab = "Error est.", 
+     main = "iteraciones vs error estimado")
 
 ```
 
@@ -148,11 +156,12 @@ cuando k tiene a infinito el error estimado tiene a 0.
 
 ```{r}
 
-m_i =  resultados$m_c[-length(resultados$m_c)]
-m_i2 = resultados$m_c
+m_i =  resultados$dx[-length(resultados$m_c)]
+m_i2 = resultados$dx
 m_i2 = m_i2[-1]
 
-plot(x =m_i, y =m_i2, xlab = "m_i", ylab = "m_(i+1)", main = "Convergencia")
+plot(x =m_i, y = m_i2, xlab = "error_i", ylab = "error_(i+1)",
+     main = "Convergencia")
 ```
 
 De acuerdo con la grafica el metodo tiene una convergencia lineal.
@@ -160,9 +169,10 @@ De acuerdo con la grafica el metodo tiene una convergencia lineal.
 ## Caso especial: dos raices en el intervalo
 
 ```{r}
-resultados <- biseccion(f, 1, 30, 1e-7)
+resultados <- biseccion(f, 1, 20, 1e-7)
 
-cat("Cero de f en [0,20] es approx: ",resultados$resultado, "con error <=", resultados$dx[resultados$i],"\n")
+cat("Cero de f en [0,20] es approx: ",resultados$resultado, "con error <=",
+    resultados$dx[resultados$i],"\n")
 ```
 
 El metodo de biseccion se acerca solamente a un de las dos raices.
@@ -173,6 +183,7 @@ El metodo de biseccion se acerca solamente a un de las dos raices.
 ```{r}
 f = function(x) 7-x^2
 curve(f, 2,3); abline(h=0, v=0) #gráfico para decidir un intervalo
+title(main="y = 7-(x^2)")
 ```
 
 La raiz de 7 está en el intervalo [2,3]
@@ -180,7 +191,8 @@ La raiz de 7 está en el intervalo [2,3]
 **Resultados**
 ```{r}
 resultados <- biseccion(f, 2, 3, 1e-7)
-cat("Cero de f en [2,3] es approx: ",resultados$resultado, "con error <=", resultados$dx[resultados$i],"\n")
+cat("Cero de f en [2,3] es approx: ",resultados$resultado, "con error <=",
+    resultados$dx[resultados$i],"\n")
 
 ```
 
@@ -211,7 +223,6 @@ print(tabla)
 
 Entre mas mas alejado estén los valores iniciales de a y b del valor de la raiz, mas iteraciones va a necesitar el metodo para llegar a la toleracia dada.
 
-
 **Numero de iteraciones esperada **
 
 La formula para el numero minimo de iteraciones necesarias para tener un error menor a s es:
@@ -221,6 +232,7 @@ $Iteraciones >= ln((b-a)/s)/ln2$
 Comprobacion: 
 
 ```{r}
-cat("Numero minimo de estimaciones esperada para sacar la raiz de el interavalo [2,3]:", log((3-2)/1e-7)/log(2))
+cat("Numero minimo de estimaciones esperada para sacar la raiz de el interavalo [2,3]:"
+    , log((3-2)/1e-7)/log(2))
 ```
 Comparando con la tabla anterior se puede comprabar que numero de iteraciones necesarias fue 23.

@@ -1,12 +1,13 @@
 ---
-title: "Metodo de Horner"
-author: "Juan Anagrita, HectorHernandez, Aldemar Ramirez"
+title: "Método de Horner"
+author: "Juan Anagrita, Hector Hernandez, Aldemar Ramirez"
 date: "July 28,2019"
 output:
+  word_document: default
+  html_notebook: default
   html_document:
     df_print: paged
   pdf_document: default
-  html_notebook: default
 ---
 
 ## Problema
@@ -27,16 +28,19 @@ Parametros:
 
 coeficientes <- los coeficientes del polinomio. Si falta algun termino el coeficiente es cero.
 
-x <- valor sobre es cual se evalua la funcion.
+x <- valor sobre es cual se evalua la función.
+
 ```{r}
 metodoHorner = function(coeficientes,x){
   y <- 0
-  contador = 0
+  multiplicaciones = 0
+  sumas = 0
   for(coeficiente in coeficientes){
     y <- y*x + coeficiente
-    contador = contador+1
+    multiplicaciones = multiplicaciones+1
+    sumas = sumas+1
   }
-  return (list("y"=y,"contador"=contador))
+  return (list("y"=y,"multiplicaciones"=multiplicaciones,"sumas" = sumas))
 }
 ```
 Función principal para evaluar el polinomio (método de Horner).
@@ -45,7 +49,9 @@ valores que retorna:
 
 y <- resultado del prolinomio evaluado en x.
 
-contador <- número de multiplicaciones necesarias que se realizaron.
+multiplicaciones <- número de multiplicaciones que se realizaron.
+
+sumas <- número de sumas realizadas.
 
 ## Implementación
 
@@ -59,7 +65,10 @@ resultado<-metodoHorner(coeficientes,-2)
 
 ```{r}
 cat("Resultado: ", resultado$y,"\n")
-cat("Numero de multiplicaciones: ",resultado$contador,"\n")
+cat("Numero de multiplicaciones: ",resultado$multiplicaciones,"\n")
+cat("Numero de sumas: ",resultado$sumas,"\n")
+cat("Numero de total de operaciones: ",resultado$multiplicaciones + resultado$sumas,"\n")
+
 ```
 
 ## Error
@@ -72,13 +81,18 @@ cat("Error:" ,f(-2)-resultado$y,"\n")
 
 **Evaluando en otros valores**
 ```{r}
-f = function(x) 2*x^4-3*x^2+3*x-4
+resultado<-metodoHorner(coeficientes,-0.000001)
 cat("Resultado evaluando funcion directamente: ", f(-0.000001),"\n")
 cat("Error:" ,f(-0.000001)-resultado$y,"\n")
 ```
-En ninguno de los casos ni evaluando con números enteros o racionales hay error al aplicar el método de Horne.
+En ninguno de los casos ni evaluando con números enteros o racionales hay error al aplicar el método de Horner.
 
 **Eficacia**
-En el meétodo de Horner solo se tienen que hacer tantas multiplicaciones como terminos tenga la función.
 
-Aplicando el método de remplazo tradicional el número total de multiplicaciones es la sumatoria de los coeficientes de los terminos.
+Sea g el grado del polinomio a resolver en un método de sustitucion "tipico" se harían $(g+g^2)/2$ multiplicaciones y $g$ sumas.
+
+$Total.operaciones = (g+g^2)/2 + g$
+
+En el método de Horner sólo se realizan $g$ sumas y $g$ multiplicaciones.
+
+$Total.operaciones = 2g$

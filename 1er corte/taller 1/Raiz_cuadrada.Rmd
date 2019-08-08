@@ -3,11 +3,11 @@ title: "Raiz cuadrada"
 author: "Juan Anagrita, Hector Hernandez, Aldemar Ramirez"
 date: "July 28,2019"
 output:
+  word_document: default
   html_notebook: default
+  pdf_document: default
   html_document:
     df_print: paged
-  word_document: default
-  pdf_document: default
 ---
 
 ## Problema
@@ -55,7 +55,8 @@ raizCuadrada = function(x,n,E){
   errorAbsoluto <- c(errorAbsoluto,abs(x-y))
   errorRelativo <- c(errorRelativo,abs(x-y)/abs(y))
   resultadosParciales = c(resultadosParciales,y)
-  lista = list("errorAbsoluto" = errorAbsoluto,"errorRelativo" = errorRelativo, "resultadosParciales" = resultadosParciales, "y" = y)
+  lista = list("errorAbsoluto" = errorAbsoluto,"errorRelativo" = errorRelativo, 
+               "resultadosParciales" = resultadosParciales, "y" = y)
 }
 ```
 Algortimo principal para calcular la raiz cuadrada de un número. La funcion devuelve una lista con todos los resultados parciales, asi como sus errores absolutos y relativos a través de cada iteracióm.
@@ -100,7 +101,8 @@ cat("Estimacion del error relativo: ", resultados$errorRelativo[iteraciones],"\n
 ## gráficas
 
 ```{r}
-plot(resultados$errorAbsoluto, type = "b", xlab="Iteraciones", ylab="Error absoluto(estimacion)", main = "Estimacion error absoluto, valor inicial = 3")
+plot(resultados$errorAbsoluto, type = "b", xlab="Iteraciones", ylab="Error absoluto(estimacion)",
+     main = "Estimacion error absoluto, valor inicial = 3")
 ```
 Grafica de iteraciones vs estimación del error absoluto, para la aeiz de siete con valor inicial de 3.
 
@@ -150,25 +152,32 @@ print(tablaErrores)
 Tabla conn los con los resultados parciales, estimación de errores absolutos y relativos, al sacar la raiz de 7 con un valor inicial que varia entre 1 y 10. Ademas se muestra el número de iteraciones necesarias para lograr el error absoluto de 1x10^(-8).
 
 ### Gráfica de la convergencia del algoritmo para raiz de 7 con valor inicial = 8
+
+Se escogio un valor bastante alejado de la raíz, para que hayan más iteraciones y se puede ver de manera mejor la convergencia del algoritmo
 ```{r}
 resultados = raizCuadrada(8,n,E)
 
-plot(resultados$errorAbsoluto, type = "b", xlab="Iteraciones", ylab="Error absoluto(estimacion)", main = "Estimacion error absoluto(valor inicial = 8)")
+plot(resultados$errorAbsoluto, type = "b", xlab="Iteraciones", ylab="Error absoluto(estimacion)",
+     main = "Estimacion error absoluto(valor inicial = 8)")
 ```
 
 ```{r}
 iteraciones = length(resultados$resultadosParciales)
 xi = (resultados$resultadosParciales)[-iteraciones]
-plot(x =c(8,xi),y = resultados$resultadosParciales, type = "b", xlab="x_i", ylab="x_i+1", main = "Convergencia de la funcion")
+plot(x =c(8,xi),y = resultados$resultadosParciales, type = "b", xlab="x_i", ylab="x_i+1",
+     main = "Convergencia de la funcion")
+plot(x = resultados$errorRelativo[-iteraciones],y = resultados$resultadosParciales[-1], type = "b",
+     xlab="error_i", ylab="error_i+1", main = "Convergencia de la funcion(Error relativo)")
 ```
 
 
-**convergencia: ** Entre más se aleja el valor inicial al valor de la raíz del número, se producen más iteraciones con lo cuál se logra apreciar la convergencia de orden cuadrado que tiene el algoritmo. En todos los casos el algoritmo converge a 0.
+**Convergencia: ** Entre más se aleja el valor inicial al valor de la raíz del número, se producen más iteraciones con lo cuál se logra apreciar la convergencia de orden cuadrado que tiene el algoritmo. En todos los casos el algoritmo converge a 0.
 
 ### gráfica del número de iteraciones necesarias vs valor inicial
 
 ```{r}
-plot(x = 1:10,y = iterations, type = "b", xlab="x(o)", ylab="Iteraciones necesarias", main = "iteraciones con diferentes x(0)")
+plot(x = 1:10,y = iterations, type = "b", xlab="x(o)", ylab="Iteraciones necesarias", 
+     main = "iteraciones con diferentes x(0)")
 ```
 
 **validez del algoritmo: ** Para la raiz de 7 con 3 iteraciones el error de truncamiento es de  1.271367*10^(-9). En todos los casos vistos el algoritmo de acerca de manera apropiada al valor esperado, con la diferencia del número de iteraciones, el cuál crece dependiendo de que tan lejos esté el valor inicial del valor verdadero de la raíz.
