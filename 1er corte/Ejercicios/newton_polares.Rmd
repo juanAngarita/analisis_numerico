@@ -3,11 +3,11 @@ title: "Método de Newton aplicado a polares"
 author: "Juan Anagrita, Hector Hernandez, Aldemar Ramirez"
 date: "Agosto 8,2019"
 output:
-  word_document: default
   pdf_document: default
-  html_notebook: default
   html_document:
     df_print: paged
+  html_notebook: default
+  word_document: default
 ---
 
 ## Problema
@@ -41,6 +41,9 @@ errorRelativo <- vector de errores relativos de las xn
 x <- vector de las xn
 
 ```{r}
+
+library(pracma)
+
 newtonraphson = function(fun, x0, tol, maxiter){
   
   # f = string
@@ -92,14 +95,29 @@ A través del método de Newton podemos encontrar en qué ángulo dos ecuaciones
 
 En este caso, ecuación 1:
 
-$$r = 2+cos(3*x)$$
+$$r = 2+cos(3*t)$$
 Ecuacion 2:
 
-$$r = 2-e^x$$
+$$r = 2-e^t$$
 
 Igualando y despejando:
 
-$$f(x) = 2+cos(3*x) -(2-e^x) = 0$$
+$$f(x) = 2+cos(3*t) -(2-e^t) = 0$$
+
+Graficas
+
+```{r}
+
+t <- deg2rad(seq(0, 360, by = 2))
+
+polar(t, 2+cos(3*t), bxcol = "white", main = "2+cos(3*t)")
+
+polar(t, 2-exp(t), col = "red", add = TRUE)
+
+
+```
+
+
 
 ```{r}
 resultados <- newtonraphson("2+cos(3*x) -(2-exp(x))",-1,1e-7,100)
@@ -155,6 +173,19 @@ $$r = cos(x)$$
 Igualando y despejando ambas ecuaciones:
 
 $$f(x) = cos(x) - 0.5$$
+
+## Gráficas
+
+```{r}
+
+polar(t, cos(t), bxcol = "white", main = "Sine and Cosine")
+
+polar(t,0.5*(t/t), col = "red", add = TRUE)
+
+
+```
+
+
 
 ```{r}
 resultados <- newtonraphson("cos(x)-0.5",5*pi/4,1e-7,100)
